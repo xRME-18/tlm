@@ -1,4 +1,4 @@
-# Follow the Lates release instructions for using with OPENAI KEY
+# Follow the Latest release instructions for using with OPENAI KEY
 
 
 
