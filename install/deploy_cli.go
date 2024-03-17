@@ -3,9 +3,10 @@ package install
 import (
 	"context"
 	"fmt"
+	"os"
+
 	"github.com/urfave/cli/v2"
 	"github.com/yusufcanb/tlm/shell"
-	"os"
 )
 
 func (i *Install) deployBefore(_ *cli.Context) error {
@@ -23,7 +24,7 @@ func (i *Install) deployAction(_ *cli.Context) error {
 	}
 
 	fmt.Println(fmt.Sprintf("Ollama version: %s\n", version))
-	i.deployTlm(i.suggestModelfile, i.explainModelfile)
+	// i.deployTlm(i.suggestModelfile, i.explainModelfile)
 
 	fmt.Println("\nDone..")
 	return nil

@@ -40,24 +40,6 @@ func (e *Explain) getParametersFor(preference string) map[string]interface{} {
 	}
 }
 
-// func (e *Explain) StreamExplanationFor(mode, prompt string) error {
-// 	onResponseFunc := func(res ollama.GenerateResponse) error {
-// 		fmt.Print(res.Response)
-// 		return nil
-// 	}
-
-// 	err := e.api.Generate(context.Background(), &ollama.GenerateRequest{
-// 		Model:   "explain:7b",
-// 		Prompt:  "Explain command: " + prompt,
-// 		Options: e.getParametersFor(mode),
-// 	}, onResponseFunc)
-
-// 	if err != nil {
-// 		fmt.Println("Error during generation:", err)
-// 	}
-// 	return nil
-// }
-
 type Request struct {
 	Model    string    `json:"model"`
 	Messages []Message `json:"messages"`
@@ -80,11 +62,11 @@ type Choice struct {
 
 func (e *Explain) StreamExplanationFor(mode, prompt string) error {
 	reqBody := &Request{
-		Model: "gpt-3.5-turbo",
+		Model: "gpt-4-0125-preview",
 		Messages: []Message{
 			{
 				Role:    "system",
-				Content: "You are a helpful assistant.",
+				Content: "You are a command line application which helps user to get brief explanations for shell commands. You will be explaining given executable shell command to user with shortest possible explanation. If given input is not a shell command, you will respond with \"I can only explain shell commands. Please provide a shell command to explain\". You will never respond any question out of shell command explanation context.",
 			},
 			{
 				Role:    "user",
@@ -99,6 +81,11 @@ func (e *Explain) StreamExplanationFor(mode, prompt string) error {
 	}
 
 	req, err := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(reqBodyBytes))
+	if err != nil {
+		fmt.Println("Error:", err)
+		return err
+	}
+
 	req.Header.Set("Content-Type", "application/json")
 	apiKey := os.Getenv("TLM_OPENAI_API_KEY")
 	req.Header.Set("Authorization", "Bearer "+apiKey) // replace with your OpenAI API key

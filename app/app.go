@@ -3,13 +3,14 @@ package app
 import (
 	_ "embed"
 	"fmt"
+	"io/fs"
+	"runtime"
+
 	ollama "github.com/jmorganca/ollama/api"
 	"github.com/yusufcanb/tlm/config"
 	"github.com/yusufcanb/tlm/explain"
 	"github.com/yusufcanb/tlm/install"
 	"github.com/yusufcanb/tlm/suggest"
-	"io/fs"
-	"runtime"
 
 	"github.com/urfave/cli/v2"
 )
@@ -39,7 +40,7 @@ func New(version, buildSha string) *TlmApp {
 	ins := install.New(o, suggestModelfile, explainModelfile)
 
 	cliApp := &cli.App{
-		Name:            "tlm",
+		Name:            "tlmOAI",
 		Usage:           "terminal copilot, powered by deepseek-coder.",
 		UsageText:       "tlm explain <command>\ntlm suggest <prompt>",
 		Version:         version,

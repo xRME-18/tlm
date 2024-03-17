@@ -16,8 +16,10 @@ import (
 )
 
 type Request struct {
-	Model    string    `json:"model"`
-	Messages []Message `json:"messages"`
+	Model       string    `json:"model"`
+	Messages    []Message `json:"messages"`
+	Temperature float64   `json:"temperature"`
+	Top_p       float64   `json:"top_p"`
 }
 
 type Message struct {
@@ -131,26 +133,28 @@ func (s *Suggest) getCommandSuggestionFor(mode, term string, prompt string) (str
 		Messages: []Message{
 			{
 				Role:    "system",
-				Content: "You are a helpful assistant.",
+				Content: "You are software program specifically for Command Line Interface usage. User will ask you some thing that can be convertible to a UNIX or Windows command. You won't provide information or explanations and your output will be just an executable shell command inside three backticks.",
 			},
 			{
 				Role:    "user",
 				Content: builder.String(),
 			},
 		},
+		Temperature: 0.1,
+		Top_p:       0.25,
 	}
 	reqBodyBytes, err := json.Marshal(reqBody)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return "", err
 	}
-
 	req, err := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(reqBodyBytes))
+	if err != nil {
+		fmt.Println("Error:", err)
+		return "", err
+	}
 	req.Header.Set("Content-Type", "application/json")
 
-	// Set the OpenAI API key as an environment variable
-
-	// Fetch the OpenAI API key from environment variables
 	apiKey := os.Getenv("TLM_OPENAI_API_KEY")
 	req.Header.Set("Authorization", "Bearer "+apiKey)
 
@@ -178,8 +182,6 @@ func (s *Suggest) getCommandSuggestionFor(mode, term string, prompt string) (str
 	for _, choice := range response.Choices {
 		responseText = choice.Message.Content
 	}
-
-	fmt.Println("using openAI")
 
 	// err := s.api.Generate(context.Background(), req, onResponse)
 	// if err != nil {

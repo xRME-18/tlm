@@ -125,7 +125,7 @@ func (s *Suggest) Command() *cli.Command {
 		Usage:       "Suggests a command.",
 		UsageText:   "tlm suggest <prompt>",
 		Description: "suggests a command for given prompt.",
-		Before:      s.before,
-		Action:      s.action,
+		// Before:      s.before,
+		Action: s.action,
 	}
 }

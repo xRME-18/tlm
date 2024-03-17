@@ -2,11 +2,12 @@ package config
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
-	"github.com/yusufcanb/tlm/shell"
 	"log"
 	"os"
 	"path"
+
+	"github.com/spf13/viper"
+	"github.com/yusufcanb/tlm/shell"
 )
 
 var (
@@ -39,10 +40,10 @@ func (c *Config) LoadOrCreateConfig() {
 		viper.Set("llm.suggestion", defaultSuggestionPolicy)
 		viper.Set("llm.explain", defaultExplainPolicy)
 
-		err := os.Setenv("OLLAMA_HOST", defaultLLMHost)
-		if err != nil {
-			fmt.Printf(shell.Err()+" error writing config file, %s", err)
-		}
+		// err := os.Setenv("OLLAMA_HOST", defaultLLMHost)
+		// if err != nil {
+		// 	fmt.Printf(shell.Err()+" error writing config file, %s", err)
+		// }
 
 		if err := viper.WriteConfigAs(path.Join(homeDir, ".tlm.yaml")); err != nil {
 			fmt.Printf(shell.Err()+" error writing config file, %s", err)
@@ -54,8 +55,9 @@ func (c *Config) LoadOrCreateConfig() {
 		log.Fatalf("Error reading config file, %s", err)
 	}
 
-	err = os.Setenv("OLLAMA_HOST", viper.GetString("llm.host"))
-	if err != nil {
-		fmt.Printf(shell.Err()+" %s", err)
-	}
+	// err = os.Setenv("OLLAMA_HOST", viper.GetString("llm.host"))
+	//
+	//	if err != nil {
+	//		fmt.Printf(shell.Err()+" %s", err)
+	//	}
 }
