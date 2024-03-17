@@ -1,3 +1,7 @@
+# Follow the Lates release instructions for using with OPENAI KEY
+
+
+
 # tlm - Local CLI Copilot, powered by deepseek-coder. 💻🦙
 
 ![Latest Build](https://img.shields.io/github/actions/workflow/status/yusufcanb/tlm/build.yaml?style=for-the-badge&logo=github)
