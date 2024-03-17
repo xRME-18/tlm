@@ -1,14 +1,39 @@
 package suggest
 
 import (
-	"context"
+	"bytes"
+	"encoding/json"
 	"fmt"
-	ollama "github.com/jmorganca/ollama/api"
-	"github.com/yusufcanb/tlm/shell"
+	"io/ioutil"
+	"net/http"
 	"regexp"
 	"runtime"
 	"strings"
+
+	"os"
+
+	"github.com/yusufcanb/tlm/shell"
 )
+
+type Request struct {
+	Model    string    `json:"model"`
+	Messages []Message `json:"messages"`
+}
+
+type Message struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
+type Response struct {
+	ID      string   `json:"id"`
+	Object  string   `json:"object"`
+	Choices []Choice `json:"choices"`
+}
+
+type Choice struct {
+	Message Message `json:"message"`
+}
 
 const (
 	Stable   string = "stable"
@@ -88,23 +113,78 @@ func (s *Suggest) getCommandSuggestionFor(mode, term string, prompt string) (str
 		builder.WriteString(fmt.Sprintf(onOperatingSystemStr, runtime.GOOS))
 	}
 
-	stream := false
-	req := &ollama.GenerateRequest{
-		Model:   "suggest:7b",
-		Prompt:  builder.String(),
-		Stream:  &stream,
-		Options: s.getParametersFor(mode),
-	}
+	// stream := false
+	// req := &ollama.GenerateRequest{
+	// 	Model:   "suggest:7b",
+	// 	Prompt:  builder.String(),
+	// 	Stream:  &stream,
+	// 	Options: s.getParametersFor(mode),
+	// }
 
-	onResponse := func(res ollama.GenerateResponse) error {
-		responseText = res.Response
-		return nil
-	}
+	// onResponse := func(res ollama.GenerateResponse) error {
+	// 	responseText = res.Response
+	// 	return nil
+	// }
 
-	err := s.api.Generate(context.Background(), req, onResponse)
+	reqBody := &Request{
+		Model: "gpt-4-0125-preview",
+		Messages: []Message{
+			{
+				Role:    "system",
+				Content: "You are a helpful assistant.",
+			},
+			{
+				Role:    "user",
+				Content: builder.String(),
+			},
+		},
+	}
+	reqBodyBytes, err := json.Marshal(reqBody)
 	if err != nil {
+		fmt.Println("Error:", err)
 		return "", err
 	}
+
+	req, err := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(reqBodyBytes))
+	req.Header.Set("Content-Type", "application/json")
+
+	// Set the OpenAI API key as an environment variable
+
+	// Fetch the OpenAI API key from environment variables
+	apiKey := os.Getenv("TLM_OPENAI_API_KEY")
+	req.Header.Set("Authorization", "Bearer "+apiKey)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return "", err
+	}
+
+	var response Response
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return "", err
+	}
+
+	for _, choice := range response.Choices {
+		responseText = choice.Message.Content
+	}
+
+	fmt.Println("using openAI")
+
+	// err := s.api.Generate(context.Background(), req, onResponse)
+	// if err != nil {
+	// 	return "", err
+	// }
 
 	return responseText, nil
 }

@@ -3,14 +3,15 @@ package suggest
 import (
 	"context"
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/charmbracelet/huh/spinner"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/viper"
 	"github.com/urfave/cli/v2"
 	"github.com/yusufcanb/tlm/explain"
 	"github.com/yusufcanb/tlm/shell"
-	"os"
-	"time"
 )
 
 func (s *Suggest) before(_ *cli.Context) error {
@@ -57,6 +58,7 @@ func (s *Suggest) action(c *cli.Context) error {
 		Style(lipgloss.NewStyle().Foreground(lipgloss.Color("2"))).
 		Action(func() {
 			t1 = time.Now()
+			fmt.Println("using open ai 1")
 			responseText, err = s.getCommandSuggestionFor(Stable, viper.GetString("shell"), prompt)
 			t2 = time.Now()
 		}).
@@ -103,6 +105,7 @@ func (s *Suggest) action(c *cli.Context) error {
 		fmt.Println(shell.SuccessMessage("┃ > ") + "Explaining..." + "\n")
 
 		exp := explain.New(s.api)
+		fmt.Println("using open ai")
 		err = exp.StreamExplanationFor(Stable, form.command)
 		if err != nil {
 			return err
