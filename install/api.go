@@ -21,16 +21,16 @@ func (i *Install) installModelfile(name, modelfile string) error {
 func (i *Install) deployTlm(suggestModelfile, explainModelfile string) {
 	var err error
 
-	_ = spinner.New().Type(spinner.Line).Title(" Getting latest CodeLLaMa").Action(func() {
-		err = i.api.Pull(context.Background(), &ollama.PullRequest{Model: "codellama:7b"}, func(res ollama.ProgressResponse) error {
+	_ = spinner.New().Type(spinner.Line).Title(" Getting latest deepseek-coder").Action(func() {
+		err = i.api.Pull(context.Background(), &ollama.PullRequest{Model: "deepseek-coder"}, func(res ollama.ProgressResponse) error {
 			return nil
 		})
 		if err != nil {
-			fmt.Println("- Installing CodeLLaMa. " + shell.Err())
+			fmt.Println("- Installing deepseek-coder. " + shell.Err())
 			os.Exit(-1)
 		}
 	}).Run()
-	fmt.Println("- Getting latest CodeLLaMa. " + shell.Ok())
+	fmt.Println("- Getting latest deepseek-coder. " + shell.Ok())
 
 	// 6. Install the modelfile (Suggest)
 	_ = spinner.New().Type(spinner.Line).Title(" Creating Modelfile for suggestions").Action(func() {

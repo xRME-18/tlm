@@ -1,18 +1,15 @@
-# tlm - Local CLI Copilot, powered by CodeLLaMa. 💻🦙
+# tlm - Local CLI Copilot, powered by deepseek-coder. 💻🦙
 
 ![Latest Build](https://img.shields.io/github/actions/workflow/status/yusufcanb/tlm/build.yaml?style=for-the-badge&logo=github)
 [![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/yusufcanb_tlm?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonar)](https://sonarcloud.io/project/overview?id=yusufcanb_tlm)
 [![Latest Release](https://img.shields.io/github/v/release/yusufcanb/tlm?display_name=release&style=for-the-badge&logo=github&link=https%3A%2F%2Fgithub.com%2Fyusufcanb%2Ftlm%2Freleases)](https://github.com/yusufcanb/tlm/releases)
 ![Downloads](https://img.shields.io/github/downloads/yusufcanb/tlm/total.svg?style=for-the-badge&logo=github&color=orange)
 
-
-
-tlm is your CLI companion which requires nothing except your workstation. It uses most efficient and powerful [CodeLLaMa](https://ai.meta.com/blog/code-llama-large-language-model-coding/) in your local environment to provide you the best possible command line suggestions.
+tlm is your CLI companion which requires nothing except your workstation. It uses most efficient and powerful [deepseek-coder](https://ai.meta.com/blog/code-llama-large-language-model-coding/) in your local environment to provide you the best possible command line suggestions.
 
 ![Suggest](./assets/suggest.gif)
 
 ![Explain](./assets/explain.gif)
-
 
 ## Features
 
@@ -25,7 +22,6 @@ tlm is your CLI companion which requires nothing except your workstation. It use
 - 👩🏻‍💻 Automatic shell detection.
 
 - 🚀 One liner generation and command explanation.
-
 
 ## Installation
 
@@ -59,13 +55,12 @@ docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
 docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
 ```
 
-###  Installation Script
+### Installation Script
 
 Installation script is the recommended way to install tlm.
 It will recognize the which platform and architecture to download and will execute install command for you.
 
 #### Linux and macOS;
-
 
 Download and execute the installation script by using the following command;
 

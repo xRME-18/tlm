@@ -1,4 +1,4 @@
-FROM codellama:7b
+FROM deepseek-coder
 
 PARAMETER temperature 0.1
 PARAMETER top_p 0.5

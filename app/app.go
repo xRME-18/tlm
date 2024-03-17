@@ -40,7 +40,7 @@ func New(version, buildSha string) *TlmApp {
 
 	cliApp := &cli.App{
 		Name:            "tlm",
-		Usage:           "terminal copilot, powered by CodeLLaMa.",
+		Usage:           "terminal copilot, powered by deepseek-coder.",
 		UsageText:       "tlm explain <command>\ntlm suggest <prompt>",
 		Version:         version,
 		CommandNotFound: notFound,
