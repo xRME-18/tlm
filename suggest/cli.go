@@ -58,7 +58,6 @@ func (s *Suggest) action(c *cli.Context) error {
 		Style(lipgloss.NewStyle().Foreground(lipgloss.Color("2"))).
 		Action(func() {
 			t1 = time.Now()
-			fmt.Println("using open ai 1")
 			responseText, err = s.getCommandSuggestionFor(Stable, viper.GetString("shell"), prompt)
 			t2 = time.Now()
 		}).
@@ -105,7 +104,6 @@ func (s *Suggest) action(c *cli.Context) error {
 		fmt.Println(shell.SuccessMessage("┃ > ") + "Explaining..." + "\n")
 
 		exp := explain.New(s.api)
-		fmt.Println("using open ai")
 		err = exp.StreamExplanationFor(Stable, form.command)
 		if err != nil {
 			return err
